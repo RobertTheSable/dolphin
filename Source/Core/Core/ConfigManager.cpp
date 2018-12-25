@@ -501,8 +501,12 @@ void SConfig::LoadCoreSettings(IniFile& ini)
   core->Get("BBA_XLINK_CHAT_OSD", &m_bba_xlink_chat_osd, true);
   for (size_t i = 0; i < std::size(m_SIDevice); ++i)
   {
-    core->Get(fmt::format("SIDevice{}", i), &m_SIDevice[i],
-              (i == 0) ? SerialInterface::SIDEVICE_GC_CONTROLLER : SerialInterface::SIDEVICE_NONE);
+        core->Get(StringFromFormat("SIDevice%i", i), (u32*)&m_SIDevice[i],
+#ifdef __LIBRETRO__
+        SerialInterface::SIDEVICE_GC_CONTROLLER);
+#else
+        (i == 0) ? SerialInterface::SIDEVICE_GC_CONTROLLER : SerialInterface::SIDEVICE_NONE);
+#endif
     core->Get(fmt::format("AdapterRumble{}", i), &m_AdapterRumble[i], true);
     core->Get(fmt::format("SimulateKonga{}", i), &m_AdapterKonga[i], false);
   }
