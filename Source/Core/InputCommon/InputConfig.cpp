@@ -28,6 +28,10 @@ InputConfig::~InputConfig() = default;
 
 bool InputConfig::LoadConfig(bool isGC)
 {
+#ifdef __LIBRETRO__
+    // Do not override input settings
+    return false;
+#endif
   IniFile inifile;
   bool useProfile[MAX_BBMOTES] = {false, false, false, false, false};
   static constexpr std::array<std::string_view, MAX_BBMOTES> num = {"1", "2", "3", "4", "BB"};
