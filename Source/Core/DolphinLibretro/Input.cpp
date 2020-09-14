@@ -517,26 +517,28 @@ void retro_set_controller_port_device(unsigned port, unsigned device)
     ControllerEmu::ControlGroup* gcMic = gcPad->GetGroup(PadGroup::Mic);
     ControllerEmu::ControlGroup* gcOptions = gcPad->GetGroup(PadGroup::Options);
 #endif
-    gcButtons->SetControlExpression(0, "A");                               // A
-    gcButtons->SetControlExpression(1, "B");                               // B
-    gcButtons->SetControlExpression(2, "X");                               // X
-    gcButtons->SetControlExpression(3, "Y");                               // Y
-    gcButtons->SetControlExpression(4, "R");                               // Z
-    gcButtons->SetControlExpression(5, "Start");                           // Start
-    gcMainStick->SetControlExpression(0, "`" + devAnalog + ":Y0-`");       // Up
-    gcMainStick->SetControlExpression(1, "`" + devAnalog + ":Y0+`");       // Down
-    gcMainStick->SetControlExpression(2, "`" + devAnalog + ":X0-`");       // Left
-    gcMainStick->SetControlExpression(3, "`" + devAnalog + ":X0+`");       // Right
-    gcCStick->SetControlExpression(0, "`" + devAnalog + ":Y1-`");          // Up
-    gcCStick->SetControlExpression(1, "`" + devAnalog + ":Y1+`");          // Down
-    gcCStick->SetControlExpression(2, "`" + devAnalog + ":X1-`");          // Left
-    gcCStick->SetControlExpression(3, "`" + devAnalog + ":X1+`");          // Right
-    gcDPad->SetControlExpression(0, "Up");                                 // Up
-    gcDPad->SetControlExpression(1, "Down");                               // Down
-    gcDPad->SetControlExpression(2, "Left");                               // Left
-    gcDPad->SetControlExpression(3, "Right");                              // Right
-    gcTriggers->SetControlExpression(0, "`" + devAnalog + ":Trigger0+`");  // L-trigger Full Press
-    gcTriggers->SetControlExpression(1, "`" + devAnalog + ":Trigger1+`");  // R-trigger Full Press
+    gcButtons->SetControlExpression(0, "A");                          // A
+    gcButtons->SetControlExpression(1, "B");                          // B
+    gcButtons->SetControlExpression(2, "X");                          // X
+    gcButtons->SetControlExpression(3, "Y");                          // Y
+    gcButtons->SetControlExpression(4, "R");                          // Z
+    gcButtons->SetControlExpression(5, "Start");                      // Start
+    gcMainStick->SetControlExpression(0, "`" + devAnalog + ":Y0-`");  // Up
+    gcMainStick->SetControlExpression(1, "`" + devAnalog + ":Y0+`");  // Down
+    gcMainStick->SetControlExpression(2, "`" + devAnalog + ":X0-`");  // Left
+    gcMainStick->SetControlExpression(3, "`" + devAnalog + ":X0+`");  // Right
+    gcCStick->SetControlExpression(0, "`" + devAnalog + ":Y1-`");     // Up
+    gcCStick->SetControlExpression(1, "`" + devAnalog + ":Y1+`");     // Down
+    gcCStick->SetControlExpression(2, "`" + devAnalog + ":X1-`");     // Left
+    gcCStick->SetControlExpression(3, "`" + devAnalog + ":X1+`");     // Right
+    gcDPad->SetControlExpression(0, "Up");                            // Up
+    gcDPad->SetControlExpression(1, "Down");                          // Down
+    gcDPad->SetControlExpression(2, "Left");                          // Left
+    gcDPad->SetControlExpression(3, "Right");                         // Right
+    gcTriggers->SetControlExpression(0, "`" + devAnalog + ":Trigger0+`|(L2&!`" + devAnalog +
+                                            ":Trigger0+`)");  // L-trigger Full Press
+    gcTriggers->SetControlExpression(1, "`" + devAnalog + ":Trigger1+`|(R2&!`" + devAnalog +
+                                            ":Trigger1+`)");  // R-trigger Full Press
     gcTriggers->SetControlExpression(2,
                                      "`" + devAnalog + ":Trigger0+`|L3");  // L-trigger Soft Press
     gcTriggers->SetControlExpression(3,
