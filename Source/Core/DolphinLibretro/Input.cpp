@@ -27,7 +27,6 @@
 #include "InputCommon/GCPadStatus.h"
 #include "InputCommon/InputConfig.h"
 
-#define RETRO_DEVICE_WIIMOTE ((1 << 8) | RETRO_DEVICE_JOYPAD)
 #define RETRO_DEVICE_WIIMOTE_SW ((2 << 8) | RETRO_DEVICE_JOYPAD)
 #define RETRO_DEVICE_WIIMOTE_NC ((3 << 8) | RETRO_DEVICE_JOYPAD)
 #define RETRO_DEVICE_WIIMOTE_CC ((4 << 8) | RETRO_DEVICE_JOYPAD)
@@ -387,21 +386,21 @@ void Init()
   Pad::Initialize();
   Keyboard::Initialize();
 
-  static const struct retro_controller_description gcpad_desc[] = {
-      {"GameCube Controller", RETRO_DEVICE_JOYPAD},
-  };
   if (SConfig::GetInstance().bWii && !SConfig::GetInstance().m_bt_passthrough_enabled)
   {
     init_wiimotes = true;
     Wiimote::Initialize(Wiimote::InitializeMode::DO_NOT_WAIT_FOR_WIIMOTES);
 
     static const struct retro_controller_description wiimote_desc[] = {
-        {"WiiMote", RETRO_DEVICE_WIIMOTE},
+        {"WiiMote", RETRO_DEVICE_JOYPAD},
         {"WiiMote (sideways)", RETRO_DEVICE_WIIMOTE_SW},
         {"WiiMote + Nunchuk", RETRO_DEVICE_WIIMOTE_NC},
         {"WiiMote + Classic Controller", RETRO_DEVICE_WIIMOTE_CC},
         {"WiiMote + Classic Controller Pro", RETRO_DEVICE_WIIMOTE_CC_PRO},
         {"Real WiiMote", RETRO_DEVICE_REAL_WIIMOTE},
+    };
+    static const struct retro_controller_description gcpad_desc[] = {
+        {"GameCube Controller", RETRO_DEVICE_JOYPAD},
     };
 
     static const struct retro_controller_info ports[] = {
@@ -420,6 +419,9 @@ void Init()
   }
   else
   {
+    static const struct retro_controller_description gcpad_desc[] = {
+        {"GameCube Controller", RETRO_DEVICE_JOYPAD},
+    };
     static const struct retro_controller_info ports[] = {
         {gcpad_desc, sizeof(gcpad_desc) / sizeof(*gcpad_desc)},
         {gcpad_desc, sizeof(gcpad_desc) / sizeof(*gcpad_desc)},
@@ -632,7 +634,7 @@ void retro_set_controller_port_device(unsigned port, unsigned device)
       }
       else
       {
-        if (device == RETRO_DEVICE_WIIMOTE)
+        if (device == RETRO_DEVICE_JOYPAD)
         {
           wmButtons->SetControlExpression(0, "A | `" + devMouse + ":Left`");   // A
           wmButtons->SetControlExpression(1, "B | `" + devMouse + ":Right`");  // B
@@ -703,7 +705,7 @@ void retro_set_controller_port_device(unsigned port, unsigned device)
     wmRumble->SetControlExpression(0, "Rumble");
     switch (device)
     {
-    case RETRO_DEVICE_WIIMOTE:
+    case RETRO_DEVICE_JOYPAD:
       wmExtension->SetSelectedAttachment(ExtensionNumber::NONE);
       WiimoteCommon::SetSource(port, WiimoteSource::Emulated);
       break;
@@ -745,10 +747,6 @@ void retro_set_controller_port_device(unsigned port, unsigned device)
 
     switch (Libretro::Input::input_types[i])
     {
-    case RETRO_DEVICE_WIIMOTE:
-      desc = Libretro::Input::descWiimote;
-      break;
-
     case RETRO_DEVICE_WIIMOTE_SW:
       desc = Libretro::Input::descWiimoteSideways;
       break;
@@ -768,11 +766,11 @@ void retro_set_controller_port_device(unsigned port, unsigned device)
     default:
       if (!SConfig::GetInstance().bWii || i > 3)
       {
-        desc = Libretro::Input::descGC;
+          desc = Libretro::Input::descGC;
       }
       else
       {
-        desc = Libretro::Input::descEmpty;
+          desc = Libretro::Input::descWiimote;
       }
       break;
     }
