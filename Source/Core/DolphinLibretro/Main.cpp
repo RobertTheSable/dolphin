@@ -246,6 +246,11 @@ void retro_run(void)
   AsyncRequests::GetInstance()->SetPassthrough(false);
   Core::DoFrameStep();
   Fifo::RunGpuLoop();
+  if (!Fifo::UseDeterministicGPUThread())
+  {
+    AsyncRequests::GetInstance()->SetEnable(false);
+    AsyncRequests::GetInstance()->SetPassthrough(true);
+  }
 
   RETRO_PERFORMANCE_STOP(dolphin_main_func);
 }
